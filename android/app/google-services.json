@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "807342724442",
+    "project_id": "womentech-f9f91",
+    "storage_bucket": "womentech-f9f91.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:807342724442:android:0a7e5e4ae7090f64d20f63",
+        "android_client_info": {
+          "package_name": "com.example.geolocalisation"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTIdyEtGXD3WROqudJ-mxyfz3lO487SzU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:807342724442:android:4e990f7ef6406cebd20f63",
+        "android_client_info": {
+          "package_name": "com.wtf.womentech"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTIdyEtGXD3WROqudJ-mxyfz3lO487SzU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
