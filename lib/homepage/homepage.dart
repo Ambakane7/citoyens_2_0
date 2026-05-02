@@ -130,7 +130,7 @@ class _HomepageState extends State<Homepage> {
         title: Image.asset("lib/images/no_bg.png", fit: BoxFit.contain,),
         actions: [
           IconButton(
-            icon: const Icon(Icons.menu, color: Colors.white, size: 32,),
+            icon: const Icon(Icons.menu, color: Colors.black, size: 32,),
             onPressed: () {
               Navigator.push(
                 context,

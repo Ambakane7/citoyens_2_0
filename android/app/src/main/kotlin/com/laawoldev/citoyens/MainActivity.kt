@@ -1,4 +1,4 @@
-package com.wtf.womentech
+package com.laawoldev.citoyens
 
 import io.flutter.embedding.android.FlutterActivity
 

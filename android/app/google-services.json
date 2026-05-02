@@ -26,6 +26,44 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:807342724442:android:ac3ce673474070b8d20f63",
+        "android_client_info": {
+          "package_name": "com.example.womentech_webadmin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTIdyEtGXD3WROqudJ-mxyfz3lO487SzU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:807342724442:android:50ad998d2941b8b9d20f63",
+        "android_client_info": {
+          "package_name": "com.laawoldev.citoyens"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTIdyEtGXD3WROqudJ-mxyfz3lO487SzU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:807342724442:android:4e990f7ef6406cebd20f63",
         "android_client_info": {
           "package_name": "com.wtf.womentech"

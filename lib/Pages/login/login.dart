@@ -1,3 +1,4 @@
+import 'package:CITOYENS_2_0/homepage/homepage.dart';
 import 'package:flutter/material.dart';
 
 
@@ -62,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => LanguagePage()),
+        MaterialPageRoute(builder: (_) => Homepage()),
       );
 
     } catch (e) {

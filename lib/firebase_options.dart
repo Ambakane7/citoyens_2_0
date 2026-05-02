@@ -52,7 +52,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDTIdyEtGXD3WROqudJ-mxyfz3lO487SzU',
-    appId: '1:807342724442:android:4e990f7ef6406cebd20f63',
+    appId: '1:807342724442:android:50ad998d2941b8b9d20f63',
     messagingSenderId: '807342724442',
     projectId: 'womentech-f9f91',
     storageBucket: 'womentech-f9f91.firebasestorage.app',
@@ -69,21 +69,21 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyDSrbt4e_E1iLDC3uRU6MoW5j8Kyyl_pWA',
-    appId: '1:807342724442:ios:a90584adf2125d9ad20f63',
+    appId: '1:807342724442:ios:a002e1035c2a69b3d20f63',
     messagingSenderId: '807342724442',
     projectId: 'womentech-f9f91',
     storageBucket: 'womentech-f9f91.firebasestorage.app',
-    iosBundleId: 'com.example.geolocalisation',
+    iosBundleId: 'com.wtf.womentech',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyA9UOTjFW7om_QOS2t7nO0eNv5wVY9B2zE',
-    appId: '1:807342724442:web:6e1cd30e466d01c2d20f63',
+    apiKey: 'AIzaSyDpaW8GpzpBl8Sdtxto_jhogko36pfHjjk',
+    appId: '1:807342724442:web:2bc5d5e020dfaeb2d20f63',
     messagingSenderId: '807342724442',
     projectId: 'womentech-f9f91',
     authDomain: 'womentech-f9f91.firebaseapp.com',
     storageBucket: 'womentech-f9f91.firebasestorage.app',
-    measurementId: 'G-XE488LMK3N',
+    measurementId: 'G-E4L667BPZ6',
   );
 
 }
