@@ -1,10 +1,11 @@
+import 'package:CITOYENS_2_0/homepage/custom_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:womentech/Pages/allsignal.dart';
-import 'package:womentech/homepage/homepage.dart';
-
+import '../../actupage.dart';
+import '../../homepage/homepage.dart';
+import '../allsignal.dart';
 import '../login/login.dart';
 import 'a_propos.dart';
 import 'condition_utilisation.dart';
@@ -47,12 +48,8 @@ class _MenuPageState extends State<MenuPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back_ios,
-                            color: Colors.white),
-                        onPressed: () => Navigator.pop(context),
-                      ),
+                      const SizedBox(height: 10),
+                      const CustomBackButton(),
 
                       const SizedBox(height: 10),
 
@@ -72,7 +69,8 @@ class _MenuPageState extends State<MenuPage> {
                             child: user == null
                                 ? const Text(
                               "Non connecté",
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(color: Colors.white,fontSize: 30,
+                                  shadows: [Shadow(offset: Offset(3, 1), blurRadius: 2)] ),
                             )
                                 : FutureBuilder<DocumentSnapshot>(
                               future: FirebaseFirestore.instance
@@ -123,11 +121,8 @@ class _MenuPageState extends State<MenuPage> {
                                         fullName.isEmpty
                                             ? "Utilisateur"
                                             : fullName,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                        ),
+                                    style: TextStyle(color: Colors.white,fontSize: 30,
+                                        shadows: [Shadow(offset: Offset(3, 1), blurRadius: 2)] ),
                                       ),
 
                                       /// ✅ EMAIL
@@ -181,6 +176,12 @@ class _MenuPageState extends State<MenuPage> {
                       );
                     }),
 
+                menuButton(context, Icons.info_outline, "Actualité", () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => const ActuPage()),
+                  );
+                }),
                 menuButton(context, Icons.info_outline, "À propos", () {
                   Navigator.pushReplacement(
                     context,
@@ -206,7 +207,12 @@ class _MenuPageState extends State<MenuPage> {
                         ),
                       );
                     }),
-
+                menuButton(context, Icons.contact_mail_outlined, "Contact", () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => const Contact()),
+                  );
+                }),
                 /// 🔐 LOGIN / LOGOUT
                 user == null
                     ? menuButton(context, Icons.login, "Me connecter", () {
@@ -225,12 +231,7 @@ class _MenuPageState extends State<MenuPage> {
                   );
                 }),
 
-                menuButton(context, Icons.contact_mail_outlined, "Contact", () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => const Contact()),
-                  );
-                }),
+
 
                 const SizedBox(height: 20),
 
@@ -266,7 +267,8 @@ Widget menuButton(
     margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     child: ListTile(
       leading: Icon(icon),
-      title: Text(title),
+      title: Text(title, style: TextStyle(color: Colors.white,fontSize: 25,
+          shadows: [Shadow(offset: Offset(1, 1), blurRadius: 1)] ),),
       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
       onTap: onTap,
     ),

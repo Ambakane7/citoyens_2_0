@@ -34,7 +34,7 @@ class SignalementItem extends StatelessWidget {
           children: [
             Container(
               width: 48,
-              height: 48,
+              height: 52,
               decoration: BoxDecoration(
                 color: Colors.amber,
                 borderRadius: BorderRadius.circular(8),
@@ -46,7 +46,7 @@ class SignalementItem extends StatelessWidget {
               label,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 15,
+                fontSize: 10,
               ),
             ),
           ],

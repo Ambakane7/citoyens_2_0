@@ -5,26 +5,37 @@ class Introduction1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Column(
-        children: [
 
-          // IMAGE (prend l'espace dispo)
-          Expanded(
-            flex: 1,
-            child: Padding(
-              padding: const EdgeInsets.all(5),
-              child: Image.asset(
-                'lib/images/3.png',
-                fit: BoxFit.cover,
+    final size = MediaQuery.of(context).size;
+    final isTablet = size.width > 600;
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Column(
+          children: [
+
+            /// IMAGE
+            Expanded(
+              flex: isTablet ? 2 : 1,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: size.width * 0.07,
+                  vertical: size.height * 0.02,
+                ),
+                child: Image.asset(
+                  'lib/images/3.png',
+                  fit: BoxFit.contain, // évite le crop
+                  width: double.infinity,
+                ),
               ),
             ),
-          ),
 
-          // TEXTE
+            /// TEXTE (placeholder pour la suite)
 
-        ],
+
+          ],
+        ),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:CITOYENS_2_0/homepage/custom_button.dart';
 import 'package:flutter/material.dart';
 
 class Contact extends StatelessWidget {
@@ -8,8 +9,11 @@ class Contact extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title:Text("Contact"),
+        title:Text("Contact".toUpperCase(), style: TextStyle(color: Colors.white,fontSize: 30,
+            shadows: [Shadow(offset: Offset(3, 1), blurRadius: 2)] ),),
+        leading: const CustomBackButton(),
         centerTitle: true,
+        actions: [const CustomMenuButton()],
       ),
       body: SingleChildScrollView(
         child: SafeArea(child: Column(

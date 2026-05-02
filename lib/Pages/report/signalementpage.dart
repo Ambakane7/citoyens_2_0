@@ -1,3 +1,4 @@
+import 'package:CITOYENS_2_0/homepage/custom_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -5,15 +6,15 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:image_picker/image_picker.dart'; // ✅ AJOUT
-import 'package:womentech/Pages/allsignal.dart';
 
-import 'package:womentech/Pages/report/SignalementItem.dart';
+import '../allsignal.dart';
 import '../simple_pages/menu_page.dart';
 
 // 🔽 DATA
 import '../../data/categorie_data.dart';
 import '../../models/model_categorie.dart' as models;
 import '../../widget/type_selector.dart';
+import 'SignalementItem.dart';
 
 class Signalement extends StatefulWidget {
   const Signalement({super.key});
@@ -44,6 +45,14 @@ class _SignalementState extends State<Signalement> {
     _commentController.dispose();
     super.dispose();
   }
+  /// 🔥 AJOUT SEVERITE
+  String? selectedSeverity;
+  final List<String> severities = const [
+    "Critique",
+    "Grave",
+    "Moyen",
+    "Faible",
+  ];
 
   /// 📍 Localisation utilisateur
   Future<void> _detectUserLocation() async {
@@ -195,6 +204,14 @@ class _SignalementState extends State<Signalement> {
         return;
       }
 
+      /// 🔥 AJOUT (validation severity)
+      if (selectedSeverity == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Veuillez choisir un niveau de gravité")),
+        );
+        return;
+      }
+
       try {
         String firstName = "";
         String lastName = "";
@@ -220,6 +237,9 @@ class _SignalementState extends State<Signalement> {
           // 💬 Contenu
           "comment": _commentController.text.trim(),
 
+          /// 🔥 CORRECTION PRINCIPALE (AJOUT SEVERITY)
+          "severity": selectedSeverity ?? "Faible",
+
           // 📌 Statut
           "status": "en_cours",
 
@@ -238,7 +258,10 @@ class _SignalementState extends State<Signalement> {
           const SnackBar(content: Text("Signalement publié avec succès")),
         );
 
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>AllSignalement()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AllSignalement()),
+        );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Erreur lors de la publication")),
@@ -249,22 +272,12 @@ class _SignalementState extends State<Signalement> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
+        leading: const CustomBackButton(),
         centerTitle: true,
-        title: Image.asset("lib/images/no_bg.png"),
+        title: Text("SIGNALEMENT", style: TextStyle(color: Colors.white,fontSize: 30,
+            shadows: [Shadow(offset: Offset(3, 1), blurRadius: 2)] ),),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.menu, color: Colors.white),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const MenuPage()),
-              );
-            },
-          ),
+          const CustomMenuButton()
         ],
       ),
       body: Stack(
@@ -384,11 +397,57 @@ class _SignalementState extends State<Signalement> {
 
                     const SizedBox(height: 12),
 
+
+                    /// 🔥 SEVERITE
+                    /// 🔥 SEVERITE (STYLE IDENTIQUE AU COMMENTAIRE)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 6,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: selectedSeverity,
+                          isExpanded: true,
+                          hint: const Text(
+                            "Niveau de gravité",
+                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                          ),
+                          items: severities.map((e) {
+                            return DropdownMenuItem(
+                              value: e,
+                              child: Text(e),
+                            );
+                          }).toList(),
+                          onChanged: (val) {
+                            setState(() {
+                              selectedSeverity = val;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
                     Row(
                       children: [
                         Expanded(
                           child: InkWell(
-                            onTap: () => _pickImage(ImageSource.camera),
+                            onTap: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("📸 Fonctionnalité en cours de développement"),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                            },
                             borderRadius: BorderRadius.circular(12),
                             child: Container(
                               height: 90,
@@ -427,7 +486,14 @@ class _SignalementState extends State<Signalement> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: InkWell(
-                            onTap: () => _pickImage(ImageSource.gallery),
+                            onTap: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("🖼️ Fonctionnalité en cours de développement"),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                            },
                             borderRadius: BorderRadius.circular(12),
                             child: Container(
                               height: 90,

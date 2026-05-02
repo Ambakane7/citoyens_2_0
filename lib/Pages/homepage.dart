@@ -1,5 +1,8 @@
+import 'package:CITOYENS_2_0/Pages/allsignal.dart';
 import 'package:flutter/material.dart';
-import 'package:womentech/homepage/homepage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../homepage/homepage.dart';
 
 class LanguagePage extends StatefulWidget {
   const LanguagePage({super.key});
@@ -13,6 +16,31 @@ class _LanguagePageState extends State<LanguagePage> {
   String selectedLang = "fr";
   bool dontShowAgain = false;
 
+  /// ================= INIT =================
+  @override
+  void initState() {
+    super.initState();
+    loadPreferences();
+  }
+
+  /// ================= LOAD DATA =================
+  Future<void> loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      selectedLang = prefs.getString('selectedLang') ?? "fr";
+      dontShowAgain = prefs.getBool('dontShowLanguagePage') ?? false;
+    });
+  }
+
+  /// ================= SAVE DATA =================
+  Future<void> savePreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString('selectedLang', selectedLang);
+    await prefs.setBool('dontShowLanguagePage', dontShowAgain);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,15 +48,15 @@ class _LanguagePageState extends State<LanguagePage> {
       body: Stack(
         children: [
 
-          /// ================= IMAGE FULL SCREEN =================
+          /// ================= IMAGE =================
           Positioned.fill(
             child: Image.asset(
               'lib/images/2.png',
-              fit: BoxFit.cover, // 🔥 prend tout l'écran
+              fit: BoxFit.contain,
             ),
           ),
 
-          /// ================= OVERLAY (optionnel pour lisibilité) =================
+          /// ================= OVERLAY =================
           Positioned.fill(
             child: Container(
               color: Colors.black.withOpacity(0.3),
@@ -54,7 +82,7 @@ class _LanguagePageState extends State<LanguagePage> {
 
                 const SizedBox(height: 30),
 
-                /// BOUTONS LANGUE
+                /// ================= LANGUES =================
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -77,13 +105,11 @@ class _LanguagePageState extends State<LanguagePage> {
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(color: Colors.white),
                         ),
-                        child: Text(
+                        child: const Text(
                           "FR",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: selectedLang == "fr"
-                                ? Colors.white
-                                : Colors.white,
+                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -109,7 +135,7 @@ class _LanguagePageState extends State<LanguagePage> {
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(color: Colors.white),
                         ),
-                        child: Text(
+                        child: const Text(
                           "BA",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -123,7 +149,7 @@ class _LanguagePageState extends State<LanguagePage> {
 
                 const SizedBox(height: 30),
 
-                /// CHECKBOX
+                /// ================= CHECKBOX =================
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
@@ -144,7 +170,7 @@ class _LanguagePageState extends State<LanguagePage> {
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.white,
-                            fontWeight: FontWeight.bold
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       )
@@ -164,7 +190,9 @@ class _LanguagePageState extends State<LanguagePage> {
               child: SizedBox(
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+
+                    await savePreferences();
 
                     debugPrint("Langue choisie : $selectedLang");
                     debugPrint("Ne plus afficher : $dontShowAgain");
@@ -172,7 +200,7 @@ class _LanguagePageState extends State<LanguagePage> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const Homepage(),
+                        builder: (context) => const LanguagePage(),//Languagepage
                       ),
                     );
                   },

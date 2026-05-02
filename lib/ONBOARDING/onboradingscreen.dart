@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:womentech/ONBOARDING/introductionPage/introduction1.dart';
-import 'package:womentech/ONBOARDING/introductionPage/introduction2.dart';
-import 'package:womentech/ONBOARDING/introductionPage/introduction3.dart';
-import 'package:womentech/splashscreen.dart';
+
+import '../Pages/homepage.dart';
+import 'introductionPage/introduction1.dart';
+import 'introductionPage/introduction2.dart';
+import 'introductionPage/introduction3.dart';
 
 class Onboradingscreen extends StatefulWidget {
   const Onboradingscreen({super.key});
@@ -13,7 +15,7 @@ class Onboradingscreen extends StatefulWidget {
 }
 
 class _OnboradingscreenState extends State<Onboradingscreen> {
-  PageController _controller = PageController();
+  final PageController _controller = PageController();
   bool onLastPage = false;
 
   @override
@@ -34,13 +36,16 @@ class _OnboradingscreenState extends State<Onboradingscreen> {
               Introduction3(),
             ],
           ),
+
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Container(
-              alignment: const Alignment(0, 0.9),
+            child: Align(
+              alignment: const Alignment(0, 0.8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+
+                  /// SKIP
                   GestureDetector(
                     onTap: () {
                       _controller.jumpToPage(2);
@@ -60,33 +65,45 @@ class _OnboradingscreenState extends State<Onboradingscreen> {
                       ),
                     ),
                   ),
+
+                  /// INDICATOR
                   SmoothPageIndicator(
                     controller: _controller,
                     count: 3,
                   ),
+
+                  /// NEXT / DONE
                   onLastPage
                       ? GestureDetector(
-                    onTap: () {
-                      Navigator.push(
+                    onTap: () async {
+                      final prefs =
+                      await SharedPreferences.getInstance();
+
+                      /// 🔥 ONBOARDING TERMINE
+                      await prefs.setBool(
+                          'hasSeenOnboarding', true);
+
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                          const SplashScreen(),
+                          builder: (_) => const LanguagePage(),
                         ),
                       );
                     },
-                    child: const Text("Done",
-                        style: TextStyle(
+                    child: const Text(
+                      "Done",
+                      style: TextStyle(
                         color: Colors.orange,
                         fontSize: 15,
                         shadows: [
-                        Shadow(
-                        color: Colors.black,
-                        offset: Offset(1, 0),
-                  )
-                ],
-                letterSpacing: 3,
-              ),),
+                          Shadow(
+                            color: Colors.black,
+                            offset: Offset(1, 0),
+                          )
+                        ],
+                        letterSpacing: 3,
+                      ),
+                    ),
                   )
                       : GestureDetector(
                     onTap: () {

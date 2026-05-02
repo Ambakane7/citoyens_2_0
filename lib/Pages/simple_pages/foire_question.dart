@@ -1,3 +1,4 @@
+import 'package:CITOYENS_2_0/homepage/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -46,10 +47,15 @@ class _FoireQuestionState extends State<FoireQuestion> {
       appBar: AppBar(
         backgroundColor: Colors.green,
         centerTitle: true,
-        title: const Text(
-          "Foire aux questions",
-          style: TextStyle(color: Colors.white),
+        leading: const CustomBackButton(),
+        title:  Text(
+          "Foire aux questions".toUpperCase(),
+          style: TextStyle(color: Colors.white,fontSize: 30,
+              shadows: [Shadow(offset: Offset(3, 1), blurRadius: 2)] ),
         ),
+        actions: [
+          const CustomMenuButton()
+        ],
       ),
 
       body: SafeArea(

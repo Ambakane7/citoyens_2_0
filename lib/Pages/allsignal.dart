@@ -1,11 +1,14 @@
+import 'package:CITOYENS_2_0/Pages/report/signalement_detail_page.dart';
+import 'package:CITOYENS_2_0/Pages/report/signalementpage.dart';
+import 'package:CITOYENS_2_0/Pages/simple_pages/menu_page.dart';
+import 'package:CITOYENS_2_0/homepage/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:womentech/Pages/report/signalementpage.dart';
-import 'package:womentech/Pages/simple_pages/menu_page.dart';
+
 
 class AllSignalement extends StatefulWidget {
-  final String? selectedId; // ✅ AJOUT IMPORTANT
+  final String? selectedId;
 
   const AllSignalement({super.key, this.selectedId});
 
@@ -15,46 +18,35 @@ class AllSignalement extends StatefulWidget {
 
 class _AllSignalementState extends State<AllSignalement> {
 
-  // 🔥 SCROLL CONTROLLER
   final ScrollController _scrollController = ScrollController();
 
-  // ===== Filtres =====
   bool showFilterPanel = false;
   bool showOnlyMyZone = false;
   bool filterByStatus = false;
   bool showArchives = false;
+  String? selectedSeverityFilter;
+  DateTime? selectedDateFilter;
 
   @override
   Widget build(BuildContext context) {
 
-    // 🔥 DEBUG
-    print("ID reçu: ${widget.selectedId}");
-
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
+
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.green,
         centerTitle: true,
-        title: const Text(
-          "Tous les signalements",
-          style: TextStyle(color: Colors.white),
+        title:  Text(
+          "Tous les signalements".toUpperCase(),
+          style: TextStyle(color: Colors.white,fontSize: 30,
+              shadows: [Shadow(offset: Offset(3, 1), blurRadius: 2)] ),
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
+        leading: const CustomBackButton(),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.menu, color: Colors.white),
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const MenuPage()),
-              );
-            },
-          ),
+          const CustomMenuButton()
         ],
       ),
+
       body: Column(
         children: [
           _topActions(),
@@ -64,8 +56,7 @@ class _AllSignalementState extends State<AllSignalement> {
     );
   }
 
-  // ===================== TOP ACTIONS =====================
-
+  /// ===================== TOP ACTIONS =====================
   Widget _topActions() {
     return Column(
       children: [
@@ -73,14 +64,12 @@ class _AllSignalementState extends State<AllSignalement> {
           padding: const EdgeInsets.all(16),
           child: Row(
             children: [
+
               Expanded(
                 child: ElevatedButton.icon(
                   icon: const Icon(Icons.tune),
                   label: const Text("Filtrer",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20)),
+                      style: TextStyle(color: Colors.white)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.amber,
                   ),
@@ -91,15 +80,14 @@ class _AllSignalementState extends State<AllSignalement> {
                   },
                 ),
               ),
+
               const SizedBox(width: 16),
+
               Expanded(
                 child: ElevatedButton.icon(
                   icon: const Icon(Icons.edit),
                   label: const Text("Créer",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20)),
+                      style: TextStyle(color: Colors.white)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.amber,
                   ),
@@ -118,74 +106,110 @@ class _AllSignalementState extends State<AllSignalement> {
         ),
 
         if (showFilterPanel)
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              children: [
-                CheckboxListTile(
-                  value: showOnlyMyZone,
-                  onChanged: (v) =>
-                      setState(() => showOnlyMyZone = v!),
-                  title: const Text("Afficher uniquement ma zone"),
+          Column(
+            children: [
+              CheckboxListTile(
+                value: filterByStatus,
+                onChanged: (v) =>
+                    setState(() => filterByStatus = v!),
+                title: const Text("Afficher seulement en cours"),
+              ),
+
+              CheckboxListTile(
+                value: showArchives,
+                onChanged: (v) =>
+                    setState(() => showArchives = v!),
+                title: const Text("Afficher traités"),
+              ),
+              /// 🔥 FILTRE SEVERITE
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: DropdownButtonFormField<String>(
+                  value: selectedSeverityFilter,
+                  hint: const Text("Filtrer par gravité"),
+                  items: ["Critique", "Grave", "Moyen", "Faible"]
+                      .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                      .toList(),
+                  onChanged: (val) {
+                    setState(() => selectedSeverityFilter = val);
+                  },
                 ),
-                CheckboxListTile(
-                  value: filterByStatus,
-                  onChanged: (v) =>
-                      setState(() => filterByStatus = v!),
-                  title: const Text("Filtrer par statut"),
+              ),
+
+              /// 🔥 FILTRE DATE
+              ListTile(
+                title: Text(
+                  selectedDateFilter == null
+                      ? "Filtrer par date"
+                      : "Date : ${DateFormat('dd/MM/yyyy').format(selectedDateFilter!)}",
                 ),
-                CheckboxListTile(
-                  value: showArchives,
-                  onChanged: (v) =>
-                      setState(() => showArchives = v!),
-                  title: const Text("Archives"),
-                ),
-              ],
-            ),
+                trailing: const Icon(Icons.calendar_today),
+                onTap: () async {
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2023),
+                    lastDate: DateTime.now(),
+                  );
+
+                  if (picked != null) {
+                    setState(() => selectedDateFilter = picked);
+                  }
+                },
+              ),
+            ],
           ),
       ],
     );
   }
 
-  // ===================== LISTE =====================
-
+  /// ===================== LISTE =====================
   Widget _signalementList() {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('signalements')
           .orderBy('createdAt', descending: true)
           .snapshots(),
+
       builder: (context, snapshot) {
+
         if (!snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());
         }
 
         final docs = snapshot.data!.docs.where((doc) {
-          if (filterByStatus && doc['status'] != 'en_cours') return false;
-          if (showArchives && doc['status'] != 'resolu') return false;
+          final data = doc.data() as Map<String, dynamic>;
+          final status = data['status'] ?? "en_cours";
+
+          if (filterByStatus && status != 'en_cours') return false;
+          if (showArchives && status != 'traite') return false;
+
+          /// 🔥 FILTRE SEVERITE
+          if (selectedSeverityFilter != null &&
+              data['severity'] != selectedSeverityFilter) {
+            return false;
+          }
+
+          /// 🔥 FILTRE DATE
+          if (selectedDateFilter != null) {
+            final Timestamp? ts = data['createdAt'];
+            if (ts == null) return false;
+
+            final date = ts.toDate();
+
+            if (date.year != selectedDateFilter!.year ||
+                date.month != selectedDateFilter!.month ||
+                date.day != selectedDateFilter!.day) {
+              return false;
+            }
+          }
+
           return true;
         }).toList();
 
         if (docs.isEmpty) {
           return const Center(child: Text("Aucun signalement"));
         }
-
-        // 🔥 SCROLL AUTOMATIQUE
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (widget.selectedId != null) {
-            final index =
-            docs.indexWhere((d) => d.id == widget.selectedId);
-
-            if (index != -1) {
-              _scrollController.animateTo(
-                index * 140,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-              );
-            }
-          }
-        });
 
         return ListView.builder(
           controller: _scrollController,
@@ -197,12 +221,9 @@ class _AllSignalementState extends State<AllSignalement> {
     );
   }
 
-  // ===================== CARD =====================
-
+  /// ===================== CARD =====================
   Widget _dismissibleCard(QueryDocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
-
-    final bool isSelected = doc.id == widget.selectedId; // ✅ clé
 
     final Timestamp? ts = data['createdAt'];
     final date = ts != null
@@ -210,38 +231,156 @@ class _AllSignalementState extends State<AllSignalement> {
         : 'Date inconnue';
 
     final String status = data['status'] ?? 'en_cours';
+    final String severity = data['severity'] ?? 'Faible';
 
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => SignalementDetailPage(data: data),
+          ),
+        );
+      },
 
-      // 🔥 SURBRILLANCE
-      color: isSelected ? Colors.amber.shade100 : Colors.white,
+      child: Card(
+        margin: const EdgeInsets.only(bottom: 12),
 
-      child: ListTile(
-        title: Text("${data['category']} - ${data['subCategory']}"),
-        subtitle: Text("Soumis le $date"),
-        trailing: _statusBadge(status),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
+              /// HEADER
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      "${data['category'] ?? ""} - ${data['subCategory'] ?? ""}",
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  _severityBadge(data['severity'] ?? "Faible"),
+                ],
+              ),
+
+              const SizedBox(height: 8),
+
+              Text(
+                "📍 ${data['latitude'] ?? ""}, ${data['longitude'] ?? ""}",
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
+              ),
+
+              Text(
+                data['authorType'] == "anonymous"
+                    ? "👤 Anonyme"
+                    : "👤 ${data['firstName'] ?? ""} ${data['lastName'] ?? ""}",
+              ),
+
+              const SizedBox(height: 5),
+
+              Text(
+                data['comment'] ?? "",
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+
+              const SizedBox(height: 5),
+
+              Text(
+                "🕒 $date",
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
+              ),
+
+              const SizedBox(height: 5),
+
+              _statusBadge(data['status'] ?? "en_cours"),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  // ===================== BADGE =====================
-
+  /// ===================== BADGE STATUS =====================
   Widget _statusBadge(String status) {
-    final bool enCours = status == 'en_cours';
+    Color color;
+    IconData icon;
+    String label;
+
+    switch (status) {
+
+      case 'verifie':
+        color = Colors.green;
+        icon = Icons.check_circle;
+        label = "Vérifié";
+        break;
+
+      case 'non_verifie':
+        color = Colors.grey;
+        icon = Icons.warning_amber_rounded;
+        label = "Non vérifié";
+        break;
+
+      case 'en_cours':
+      default:
+        color = Colors.orange;
+        icon = Icons.hourglass_bottom;
+        label = "En cours";
+        break;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 14, color: Colors.white),
+          const SizedBox(width: 5),
+          Text(
+            label,
+            style: const TextStyle(color: Colors.white),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// ===================== BADGE SEVERITY =====================
+  Widget _severityBadge(String severity) {
+    Color color = Colors.grey;
+
+    switch (severity) {
+      case "Critique":
+        color = Colors.red;
+        break;
+      case "Grave":
+        color = Colors.orange;
+        break;
+      case "Moyen":
+        color = Colors.amber;
+        break;
+      case "Faible":
+        color = Colors.green;
+        break;
+    }
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: enCours ? Colors.orange : Colors.green,
+        color: color,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
-        enCours ? "En cours" : "Traité",
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 12,
-        ),
+        severity,
+        style: const TextStyle(color: Colors.white),
       ),
     );
   }

@@ -1,9 +1,11 @@
+import 'package:CITOYENS_2_0/homepage/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:womentech/Pages/login/login.dart';
+
 
 import '../../auth/auth_service.dart';
 import '../../component/my_button.dart';
+import '../login/login.dart';
 
 class RegisterPage extends StatefulWidget {
   final Function()? onTap;
@@ -38,6 +40,27 @@ class _RegisterPageState extends State<RegisterPage> {
   ];
 
   Future<void> register() async {
+
+    if (firstNameController.text.isEmpty ||
+        lastNameController.text.isEmpty ||
+        phoneController.text.isEmpty ||
+        passwordController.text.isEmpty ||
+        confirmPasswordController.text.isEmpty ||
+        selectedProfile == null) {
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Veuillez remplir tous les champs")),
+      );
+      return;
+    }
+
+    if (passwordController.text != confirmPasswordController.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Les mots de passe ne correspondent pas")),
+      );
+      return;
+    }
+
     setState(() => isLoading = true);
 
     try {
@@ -60,10 +83,19 @@ class _RegisterPageState extends State<RegisterPage> {
         'phone': phoneController.text.trim(),
         'email': email,
         'profile': selectedProfile,
+        'createdAt': FieldValue.serverTimestamp(),
       });
 
+      /// ✅ NAVIGATION APRES SUCCES
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const Homepage()),
+      );
+
     } catch (e) {
-      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Erreur: $e")),
+      );
     }
 
     setState(() => isLoading = false);
@@ -117,7 +149,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ? const CircularProgressIndicator()
                   : MyButton(
                 text: "S'inscrire",
-                onTap: register,
+                onTap: isLoading ? null : register,
               ),
 
               const SizedBox(height: 10),
@@ -167,12 +199,19 @@ class _RegisterPageState extends State<RegisterPage> {
         children: [
 
           /// LOGO
-          SizedBox(
-            height: 110,
-            child: Image.asset(
-              'lib/images/logo original .png',
-              fit: BoxFit.contain,
-              filterQuality: FilterQuality.high,
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: SizedBox(
+              height: 90,
+              child: Image.asset(
+                'lib/images/logo original .png',
+                fit: BoxFit.contain,
+                filterQuality: FilterQuality.high,
+              ),
             ),
           ),
 

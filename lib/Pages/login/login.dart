@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:womentech/Pages/register/register.dart';
+
 
 import '../../auth/auth_service.dart';
 import '../../component/my_button.dart';
 import '../homepage.dart';
+import '../register/register.dart';
 
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
@@ -151,12 +152,19 @@ class _LoginPageState extends State<LoginPage> {
         children: [
 
           /// IMAGE (plus grande + visible)
-          SizedBox(
-            height: 110,
-            child: Image.asset(
-              'lib/images/logo original .png',
-              fit: BoxFit.contain,
-              filterQuality: FilterQuality.high,
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: SizedBox(
+              height: 90,
+              child: Image.asset(
+                'lib/images/logo original .png',
+                fit: BoxFit.contain,
+                filterQuality: FilterQuality.high,
+              ),
             ),
           ),
 

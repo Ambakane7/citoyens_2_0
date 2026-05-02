@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:womentech/Pages/homepage.dart';
-import 'package:womentech/auth/auth_gate.dart';
+
+import 'auth/auth_gate.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -11,11 +11,12 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+
   @override
   void initState() {
     super.initState();
 
-    Timer(const Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 5), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const AuthGate()),
@@ -26,30 +27,23 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.cyanAccent,
+      backgroundColor: Colors.white, // ✅ FIX ICI
       body: SafeArea(
-        child: Container(
-          color: Colors.white,
-          child: Column(
-            children: [
+        child: Column(
+          children: [
 
-              // IMAGE (prend l'espace dispo)
-              Expanded(
-                flex: 1,
-                child: Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: Image.asset(
-                    'lib/images/logo original .png',
-                    fit: BoxFit.cover,
-                  ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Image.asset(
+                  'lib/images/logo original .png',
+                  fit: BoxFit.contain,
                 ),
               ),
+            ),
 
-              // TEXTE
-
-            ],
-          ),
-        )
+          ],
+        ),
       ),
     );
   }

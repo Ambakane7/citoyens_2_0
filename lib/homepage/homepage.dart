@@ -4,8 +4,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:womentech/Pages/report/signalementpage.dart';
-import 'package:womentech/Pages/allsignal.dart';
+import '../Pages/allsignal.dart';
+import '../Pages/report/signalementpage.dart';
 import '../Pages/simple_pages/menu_page.dart';
 
 class Homepage extends StatefulWidget {
@@ -35,14 +35,47 @@ class _HomepageState extends State<Homepage> {
   /// 📍 POSITION
   Future<void> _detectUserLocation() async {
     try {
-      final position = await Geolocator.getCurrentPosition();
+      // 1. Vérifier si GPS actif
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        _showError("Active la localisation GPS");
+        return;
+      }
+
+      // 2. Vérifier permission
+      LocationPermission permission = await Geolocator.checkPermission();
+
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+
+      // 3. Cas refus
+      if (permission == LocationPermission.denied) {
+        _showError("Permission refusée");
+        return;
+      }
+
+      // 4. Cas refus définitif
+      if (permission == LocationPermission.deniedForever) {
+        _showError("Autorisation refusée définitivement");
+        await Geolocator.openAppSettings();
+        return;
+      }
+
+      // 5. Récupérer position
+      final position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      if (!mounted) return;
 
       setState(() {
         _selectedPosition = LatLng(position.latitude, position.longitude);
         _isLoadingLocation = false;
       });
+
     } catch (e) {
-      _showError("Erreur localisation");
+      _showError("Erreur localisation : $e");
     }
   }
 
@@ -56,8 +89,8 @@ class _HomepageState extends State<Homepage> {
         final data = doc.data();
         return {
           "id": doc.id,
-          "lat": (data["lat"] ?? 0).toDouble(),
-          "lng": (data["lng"] ?? 0).toDouble(),
+          "lat": (data["latitude"] ?? 0).toDouble(),
+          "lng": (data["longitude"] ?? 0).toDouble(),
         };
       }).toList();
     });
@@ -85,17 +118,19 @@ class _HomepageState extends State<Homepage> {
         signal["lat"],
         signal["lng"],
       );
-      return distance < 2000;
+      return distance < 5000;
     }).toList();
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        automaticallyImplyLeading: false, // 🚫 en
+        backgroundColor: Colors.white,
+
         centerTitle: true,
         title: Image.asset("lib/images/no_bg.png", fit: BoxFit.contain,),
         actions: [
           IconButton(
-            icon: const Icon(Icons.menu, color: Colors.white),
+            icon: const Icon(Icons.menu, color: Colors.white, size: 32,),
             onPressed: () {
               Navigator.push(
                 context,
@@ -117,8 +152,9 @@ class _HomepageState extends State<Homepage> {
             ),
             children: [
               TileLayer(
-                urlTemplate:
-                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                urlTemplate: "https://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
+                userAgentPackageName: 'com.laawoldev.citoyens2',
+                tileProvider: NetworkTileProvider(),
               ),
 
               MarkerLayer(
@@ -142,7 +178,7 @@ class _HomepageState extends State<Homepage> {
           Positioned(
             left: 0,
             right: 0,
-            bottom: 20,
+            bottom: 70,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Stack(
@@ -180,9 +216,9 @@ class _HomepageState extends State<Homepage> {
                         children: [
 
                           Text(
-                            nearbySignals.isEmpty
-                                ? "Aucun problème rapporté dans cette zone."
-                                : "${nearbySignals.length} problème(s) détecté(s)",
+                      nearbySignals.isEmpty
+                      ? "0 problème détecté dans cette zone"
+                            : "${nearbySignals.length} problème${nearbySignals.length > 1 ? "s" : ""} détecté${nearbySignals.length > 1 ? "s" : ""}",
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -212,13 +248,11 @@ class _HomepageState extends State<Homepage> {
                     top: -30,
                     left: 16,
                     right: 16,
-                    child: SizedBox(
-                      height: 56,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.amber,
-                        ),
-                        onPressed: () {
+                    child: Material(
+                      elevation: 6,
+                      borderRadius: BorderRadius.circular(14),
+                      child: GestureDetector(
+                        onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -226,9 +260,29 @@ class _HomepageState extends State<Homepage> {
                             ),
                           );
                         },
-                        child: const Text(
-                          "! Signaler un problème",
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+                        child: Container(
+                          height: 56,
+                          decoration: BoxDecoration(
+                            color: Colors.amber,
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.report_problem,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                "Signaler un problème",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
