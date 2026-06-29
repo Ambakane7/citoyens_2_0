@@ -18,30 +18,31 @@ class ActuDetailPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: const Text("Actualité", style: TextStyle(color: Colors.white
-        ),),
+        title: const Text(
+          "Actualité",
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
         ),
       ),
-
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
-
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// 📰 TITRE
             Text(
               (data['title'] ?? "").toString(),
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
             ),
 
             const SizedBox(height: 10),
 
-            /// 👤 + DATE
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -49,13 +50,15 @@ class ActuDetailPage extends StatelessWidget {
                   (data['author'] ?? "").toString(),
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                Text(date, style: const TextStyle(color: Colors.grey)),
+                Text(
+                  date,
+                  style: const TextStyle(color: Colors.grey),
+                ),
               ],
             ),
 
             const SizedBox(height: 20),
 
-            /// 🔥 CONTENU INTELLIGENT
             _buildContent(content),
           ],
         ),
@@ -63,30 +66,37 @@ class ActuDetailPage extends StatelessWidget {
     );
   }
 
-  /// 🔥 GESTION QUILL + MARKDOWN
   Widget _buildContent(dynamic content) {
-    /// 👉 CAS QUILL (JSON)
-    if (content is List) {
-      try {
-        final controller = quill.QuillController(
-          document: quill.Document.fromJson(content),
-          selection: const TextSelection.collapsed(offset: 0),
-        );
-
-        return SizedBox(
-          height: 400,
-          child: quill.QuillEditor.basic(controller: controller),
-        );
-      } catch (e) {
-        return const Text("Erreur d'affichage");
-      }
-    }
-
-    /// 👉 CAS MARKDOWN
+    /// Cas Markdown
     if (content is String) {
       return MarkdownBody(data: content);
     }
 
+    /// Cas Quill JSON (sans flutter_quill)
+    if (content is List) {
+      return SelectableText(
+        _quillJsonToPlainText(content),
+        style: const TextStyle(
+          fontSize: 16,
+          height: 1.6,
+        ),
+      );
+    }
+
     return const Text("Aucun contenu");
+  }
+
+  String _quillJsonToPlainText(List<dynamic> json) {
+    final buffer = StringBuffer();
+
+    for (final item in json) {
+      if (item is Map &&
+          item.containsKey('insert') &&
+          item['insert'] is String) {
+        buffer.write(item['insert']);
+      }
+    }
+
+    return buffer.toString();
   }
 }
