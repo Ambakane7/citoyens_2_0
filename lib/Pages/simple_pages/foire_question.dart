@@ -199,7 +199,7 @@ class _FoireQuestionState extends State<FoireQuestion> {
                 question:
                 "Qui reçoit et traite mes requêtes ?",
                 answer:
-                "Une fois envoyé, votre signalement est reçu sur la plateforme d'administration gérée par Women Tech Mali. Après vérification afin d'éviter les abus et les fausses alertes, il est transmis aux autorités locales ou aux services techniques compétents.",
+                "Une fois envoyé, votre signalement est reçu sur la plateforme d’administration gérée par les équipes Women Tech Mali pour vérification afin d’éviter les abus et les fausses alertes 🚨. Il est ensuite transmis aux autorités locales ou aux services techniques compétents.",
               ),
 
               buildFaqItem(

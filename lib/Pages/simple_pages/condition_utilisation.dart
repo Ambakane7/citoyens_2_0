@@ -131,7 +131,7 @@ class ConditionUtilisation extends StatelessWidget {
                 icon: Icons.flag,
                 title: "1. Objectif de l'application",
                 content:
-                "L'Application Citoyens 2.0, développée par Women Tech Mali (WTM) avec le soutien du FAMOC, a pour objectif de faciliter l'engagement citoyen en permettant aux utilisateurs de signaler des incidents locaux (Éducation, Santé, Infrastructure, Sécurité, etc.) et d'accéder à des informations institutionnelles certifiées. En utilisant cette application, vous acceptez les présentes Conditions d'Utilisation.",
+                "L’Application Citoyens 2.0, développée par l’Association Women Tech Mali (WTM) avec le soutien du Ministère des Affaires Étrangères du Danemark (DANIDA) à travers le Fonds d’Appui aux Moteurs du Changement (FAMOC II), a pour objectif de faciliter l’engagement citoyen et l’accès à des informations fiables grâce au numérique. Elle permet aux utilisateurs de signaler des incidents locaux dans différents secteurs (Éducation, Santé, Infrastructures, Sécurité etc.) et d’accéder à des informations institutionnelles certifiées. En utilisant cette application, vous acceptez les présentes conditions d’Utilisation.",
               ),
 
               buildConditionItem(

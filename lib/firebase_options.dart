@@ -64,7 +64,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '807342724442',
     projectId: 'womentech-f9f91',
     storageBucket: 'womentech-f9f91.firebasestorage.app',
-    iosBundleId: 'com.wtf.womentech',
+    iosBundleId: 'com.laawoldev.citoyens',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -73,7 +73,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '807342724442',
     projectId: 'womentech-f9f91',
     storageBucket: 'womentech-f9f91.firebasestorage.app',
-    iosBundleId: 'com.wtf.womentech',
+    iosBundleId: 'com.laawoldev.citoyens',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(

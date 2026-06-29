@@ -193,18 +193,19 @@ class Apropos extends StatelessWidget {
 
               buildSectionTitle("Notre mission"),
 
-              buildInfoCard(
-                icon: Icons.flag,
-                title: "Objectif 1",
-                content:
-                "Faciliter la remontée d'informations sur les problèmes du quotidien (Éducation, Santé, Infrastructure, Sécurité, etc.) afin de permettre une intervention plus rapide des services compétents.",
-              ),
+
 
               buildInfoCard(
                 icon: Icons.verified,
-                title: "Objectif 2",
+                title: "Objectif 1",
                 content:
                 "Lutter contre la désinformation en offrant un accès direct à des informations institutionnelles certifiées et fiables ainsi qu'à des articles de fact-checking.",
+              ),
+              buildInfoCard(
+                icon: Icons.flag,
+                title: "Objectif 2",
+                content:
+                "Faciliter la remontée d'informations sur les problèmes du quotidien (Éducation, Santé, Infrastructure, Sécurité, etc.) afin de permettre une intervention plus rapide des services compétents.",
               ),
 
               const SizedBox(height: 20),
@@ -258,7 +259,7 @@ class Apropos extends StatelessWidget {
                 icon: Icons.handshake,
                 title: "Women Tech Mali & DANIDA/FAMOC",
                 content:
-                "Ce projet a été rendu possible grâce à l'engagement de Women Tech Mali, association œuvrant pour la promotion des TIC auprès des jeunes filles et des femmes, ainsi qu'au soutien technique et financier du DANIDA à travers le Fonds d'Appui aux Moteurs du Changement (FAMOC).",
+                "Ce projet a été rendu possible grâce à l’engagement de WTM, association œuvrant pour la promotion des TIC auprès des jeunes filles et femmes, ainsi qu’au soutien financier de DANIA à travers le AMOC II.",
               ),
 
               const SizedBox(height: 20),
@@ -303,7 +304,7 @@ class Apropos extends StatelessWidget {
 
               Center(
                 child: Text(
-                  "Ensemble, construisons une citoyenneté active et responsable !",
+                  "Ensemble, construisons une citoyenneté numérique active et responsable !",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.green.shade700,
