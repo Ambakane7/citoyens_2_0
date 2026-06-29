@@ -53,7 +53,7 @@ dependencies:
   geolocator: ^14.0.2
   smooth_page_indicator: ^2.0.1
   flutter_markdown: ^0.7.7+1
-  flutter_quill: ^11.5.0
+  flutter_quill:
   http: ^1.2.1
 
 
