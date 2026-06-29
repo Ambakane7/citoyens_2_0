@@ -51,7 +51,7 @@ class _OnboradingscreenState extends State<Onboradingscreen> {
                       _controller.jumpToPage(2);
                     },
                     child: const Text(
-                      "Skip",
+                      "Sauter",
                       style: TextStyle(
                         color: Colors.orange,
                         fontSize: 15,
@@ -91,7 +91,7 @@ class _OnboradingscreenState extends State<Onboradingscreen> {
                       );
                     },
                     child: const Text(
-                      "Done",
+                      "Acceder",
                       style: TextStyle(
                         color: Colors.orange,
                         fontSize: 15,
@@ -114,7 +114,7 @@ class _OnboradingscreenState extends State<Onboradingscreen> {
                       );
                     },
                     child: const Text(
-                      "Next",
+                      "Suivant",
                       style: TextStyle(
                         color: Colors.orange,
                         fontSize: 15,

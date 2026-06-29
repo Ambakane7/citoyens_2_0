@@ -38,7 +38,7 @@ class _AllSignalementState extends State<AllSignalement> {
         centerTitle: true,
         title:  Text(
           "Tous les signalements".toUpperCase(),
-          style: TextStyle(color: Colors.white,fontSize: 30,
+          style: TextStyle(color: Colors.white,fontSize: 15,
               shadows: [Shadow(offset: Offset(3, 1), blurRadius: 2)] ),
         ),
         leading: const CustomBackButton(),
@@ -223,81 +223,305 @@ class _AllSignalementState extends State<AllSignalement> {
 
   /// ===================== CARD =====================
   Widget _dismissibleCard(QueryDocumentSnapshot doc) {
+
     final data = doc.data() as Map<String, dynamic>;
 
     final Timestamp? ts = data['createdAt'];
+
     final date = ts != null
-        ? DateFormat('dd/MM/yyyy HH:mm').format(ts.toDate())
+        ? DateFormat('dd/MM/yyyy HH:mm')
+        .format(ts.toDate())
         : 'Date inconnue';
 
-    final String status = data['status'] ?? 'en_cours';
-    final String severity = data['severity'] ?? 'Faible';
+    final String status =
+        data['status'] ?? 'en_cours';
+
+    final String severity =
+        data['severity'] ?? 'Faible';
+
+    /// 📸 IMAGES
+    final List images =
+        data['images'] ?? [];
 
     return GestureDetector(
+
       onTap: () {
+
         Navigator.push(
           context,
+
           MaterialPageRoute(
-            builder: (_) => SignalementDetailPage(data: data),
+            builder: (_) =>
+                SignalementDetailPage(
+                  data: data,
+                ),
           ),
         );
       },
 
       child: Card(
-        margin: const EdgeInsets.only(bottom: 12),
+
+        margin:
+        const EdgeInsets.only(bottom: 12),
+
+        elevation: 3,
+
+        shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.circular(16),
+        ),
 
         child: Padding(
+
           padding: const EdgeInsets.all(12),
 
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment:
+            CrossAxisAlignment.start,
+
             children: [
 
-              /// HEADER
+              /// 📸 IMAGES
+              if (images.isNotEmpty)
+
+                SizedBox(
+                  height: 90,
+
+                  child: ListView.builder(
+
+                    scrollDirection:
+                    Axis.horizontal,
+
+                    itemCount:
+                    images.length > 3
+                        ? 3
+                        : images.length,
+
+                    itemBuilder:
+                        (context, index) {
+
+                      return Padding(
+
+                        padding:
+                        const EdgeInsets.only(
+                          right: 8,
+                          bottom: 10,
+                        ),
+
+                        child: ClipRRect(
+
+                          borderRadius:
+                          BorderRadius.circular(
+                            10,
+                          ),
+
+                          child: Stack(
+                            children: [
+
+                              Image.network(
+                                images[index],
+
+                                width: 85,
+                                height: 85,
+
+                                fit: BoxFit.cover,
+
+                                loadingBuilder:
+                                    (
+                                    context,
+                                    child,
+                                    progress,
+                                    ) {
+
+                                  if (progress ==
+                                      null) {
+
+                                    return child;
+                                  }
+
+                                  return Container(
+                                    width: 85,
+                                    height: 85,
+
+                                    color: Colors
+                                        .grey
+                                        .shade200,
+
+                                    alignment:
+                                    Alignment.center,
+
+                                    child:
+                                    const SizedBox(
+                                      width: 20,
+                                      height: 20,
+
+                                      child:
+                                      CircularProgressIndicator(
+                                        strokeWidth:
+                                        2,
+                                      ),
+                                    ),
+                                  );
+                                },
+
+                                errorBuilder:
+                                    (
+                                    context,
+                                    error,
+                                    stackTrace,
+                                    ) {
+
+                                  return Container(
+                                    width: 85,
+                                    height: 85,
+
+                                    color: Colors
+                                        .grey
+                                        .shade300,
+
+                                    alignment:
+                                    Alignment.center,
+
+                                    child:
+                                    const Icon(
+                                      Icons
+                                          .broken_image,
+
+                                      color:
+                                      Colors.grey,
+                                    ),
+                                  );
+                                },
+                              ),
+
+                              /// ➕ PHOTOS SUPP
+                              if (index == 2 &&
+                                  images.length > 3)
+
+                                Container(
+                                  width: 85,
+                                  height: 85,
+
+                                  color:
+                                  Colors.black54,
+
+                                  alignment:
+                                  Alignment.center,
+
+                                  child: Text(
+                                    "+${images.length - 3}",
+
+                                    style:
+                                    const TextStyle(
+                                      color:
+                                      Colors.white,
+
+                                      fontWeight:
+                                      FontWeight.bold,
+
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+              /// 🔝 HEADER
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment:
+                MainAxisAlignment.spaceBetween,
+
                 children: [
+
                   Expanded(
                     child: Text(
                       "${data['category'] ?? ""} - ${data['subCategory'] ?? ""}",
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+
+                      style: const TextStyle(
+                        fontWeight:
+                        FontWeight.bold,
+
+                        fontSize: 15,
+                      ),
                     ),
                   ),
-                  _severityBadge(data['severity'] ?? "Faible"),
+
+                  _severityBadge(
+                    data['severity'] ??
+                        "Faible",
+                  ),
                 ],
               ),
 
               const SizedBox(height: 8),
 
+              /// 📍 POSITION
               Text(
                 "📍 ${data['latitude'] ?? ""}, ${data['longitude'] ?? ""}",
-                style: const TextStyle(fontSize: 12, color: Colors.grey),
+
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey,
+                ),
               ),
 
+              const SizedBox(height: 4),
+
+              /// 👤 AUTEUR
               Text(
-                data['authorType'] == "anonymous"
+                data['authorType'] ==
+                    "anonymous"
+
                     ? "👤 Anonyme"
+
                     : "👤 ${data['firstName'] ?? ""} ${data['lastName'] ?? ""}",
+
+                style: const TextStyle(
+                  fontWeight:
+                  FontWeight.w500,
+                ),
               ),
 
-              const SizedBox(height: 5),
+              const SizedBox(height: 8),
 
+              /// 💬 COMMENTAIRE
               Text(
                 data['comment'] ?? "",
+
                 maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+
+                overflow:
+                TextOverflow.ellipsis,
+
+                style: const TextStyle(
+                  fontSize: 14,
+                ),
               ),
 
-              const SizedBox(height: 5),
+              const SizedBox(height: 10),
 
+              /// 🕒 DATE
               Text(
                 "🕒 $date",
-                style: const TextStyle(fontSize: 12, color: Colors.grey),
+
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey,
+                ),
               ),
 
-              const SizedBox(height: 5),
+              const SizedBox(height: 10),
 
-              _statusBadge(data['status'] ?? "en_cours"),
+              /// 📌 STATUS
+              _statusBadge(
+                data['status'] ??
+                    "en_cours",
+              ),
             ],
           ),
         ),

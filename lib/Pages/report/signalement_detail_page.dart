@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class SignalementDetailPage extends StatelessWidget {
+
   final Map<String, dynamic> data;
 
-  const SignalementDetailPage({super.key, required this.data});
+  const SignalementDetailPage({
+    super.key,
+    required this.data,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,54 +18,198 @@ class SignalementDetailPage extends StatelessWidget {
         .format(data['createdAt'].toDate())
         : "Date inconnue";
 
-    final bool isAnonymous = data['authorType'] == "anonymous";
+    final bool isAnonymous =
+        data['authorType'] == "anonymous";
+
+    /// 📸 IMAGES
+    final List images =
+        data['images'] ?? [];
 
     return Scaffold(
+
       appBar: AppBar(
-        title: const Text("Détail du signalement", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+        title: const Text(
+          "Détail du signalement",
+
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+
         backgroundColor: Colors.green,
+
         centerTitle: true,
+
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.white,
+          ),
+
+          onPressed: () =>
+              Navigator.pop(context),
         ),
       ),
 
       body: SingleChildScrollView(
+
         padding: const EdgeInsets.all(20),
 
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment:
+          CrossAxisAlignment.start,
+
           children: [
 
-            /// TITRE
+            /// 📸 IMAGES
+            if (images.isNotEmpty)
+
+              SizedBox(
+                height: 110,
+
+                child: ListView.builder(
+
+                  scrollDirection:
+                  Axis.horizontal,
+
+                  itemCount: images.length,
+
+                  itemBuilder:
+                      (context, index) {
+
+                    return Padding(
+                      padding:
+                      const EdgeInsets.only(
+                        right: 10,
+                        bottom: 10,
+                      ),
+
+                      child: ClipRRect(
+                        borderRadius:
+                        BorderRadius.circular(
+                          12,
+                        ),
+
+                        child: Image.network(
+                          images[index],
+
+                          width: 250,
+                          height: 500,
+
+                          fit: BoxFit.cover,
+
+                          loadingBuilder:
+                              (
+                              context,
+                              child,
+                              progress,
+                              ) {
+
+                            if (progress ==
+                                null) {
+
+                              return child;
+                            }
+
+                            return Container(
+                              width: 110,
+                              height: 110,
+
+                              color: Colors
+                                  .grey.shade200,
+
+                              alignment:
+                              Alignment.center,
+
+                              child:
+                              const CircularProgressIndicator(),
+                            );
+                          },
+
+                          errorBuilder:
+                              (
+                              context,
+                              error,
+                              stackTrace,
+                              ) {
+
+                            return Container(
+                              width: 110,
+                              height: 110,
+
+                              color: Colors
+                                  .grey.shade300,
+
+                              alignment:
+                              Alignment.center,
+
+                              child:
+                              const Icon(
+                                Icons
+                                    .broken_image,
+
+                                size: 40,
+                                color:
+                                Colors.grey,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+            const SizedBox(height: 10),
+
+            /// 🏷️ TITRE
             Text(
-              (data['category'] ?? "Non défini").toString(),
+              (data['category'] ??
+                  "Non défini")
+                  .toString(),
+
               style: const TextStyle(
-                  fontSize: 20, fontWeight: FontWeight.bold),
+                fontSize: 20,
+                fontWeight:
+                FontWeight.bold,
+              ),
             ),
 
             const SizedBox(height: 5),
 
             Text(
-              (data['subCategory'] ?? "").toString(),
+              (data['subCategory'] ?? "")
+                  .toString(),
             ),
 
             const SizedBox(height: 20),
 
-            /// BADGES
+            /// 🏷️ BADGES
             Row(
               children: [
+
                 _badge(
-                  (data['severity'] ?? "Faible").toString(),
+                  (data['severity'] ??
+                      "Faible")
+                      .toString(),
+
                   Colors.red,
                 ),
+
                 const SizedBox(width: 10),
+
                 _badge(
-                  data['status'] == "en_cours"
+                  data['status'] ==
+                      "en_cours"
+
                       ? "En cours"
                       : "Traité",
-                  data['status'] == "en_cours"
+
+                  data['status'] ==
+                      "en_cours"
+
                       ? Colors.orange
                       : Colors.green,
                 ),
@@ -70,42 +218,65 @@ class SignalementDetailPage extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            /// DESCRIPTION
-            _section("Description", data['comment']),
+            /// 💬 DESCRIPTION
+            _section(
+              "Description",
+              data['comment'],
+            ),
 
-            /// LOCALISATION
+            /// 📍 LOCALISATION
             _section(
               "Localisation",
-              "Latitude: ${data['latitude'] ?? ""}\nLongitude: ${data['longitude'] ?? ""}",
+
+              "Latitude: ${data['latitude'] ?? ""}\n"
+                  "Longitude: ${data['longitude'] ?? ""}",
             ),
 
-            /// UTILISATEUR
+            /// 👤 UTILISATEUR
             _section(
               "Auteur",
+
               isAnonymous
                   ? "Anonyme"
-                  : "${data['firstName'] ?? ""} ${data['lastName'] ?? ""}",
+                  : "${data['firstName'] ?? ""} "
+                  "${data['lastName'] ?? ""}",
             ),
 
-            /// DATE
-            _section("Date de publication", date),
+            /// 🕒 DATE
+            _section(
+              "Date de publication",
+              date,
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _section(String title, dynamic value) {
+  /// 📦 SECTION
+  Widget _section(
+      String title,
+      dynamic value,
+      ) {
+
     return Padding(
-      padding: const EdgeInsets.only(bottom: 15),
+
+      padding:
+      const EdgeInsets.only(bottom: 15),
+
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment:
+        CrossAxisAlignment.start,
+
         children: [
 
           Text(
             title,
+
             style: const TextStyle(
-              fontWeight: FontWeight.bold,
+              fontWeight:
+              FontWeight.bold,
+
               fontSize: 16,
             ),
           ),
@@ -114,28 +285,53 @@ class SignalementDetailPage extends StatelessWidget {
 
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(12),
+
+            padding:
+            const EdgeInsets.all(12),
+
             decoration: BoxDecoration(
               color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(10),
+
+              borderRadius:
+              BorderRadius.circular(10),
             ),
-            child: Text((value ?? "").toString()), // 🔥 FIX ICI
-          )
+
+            child: Text(
+              (value ?? "").toString(),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _badge(String text, Color color) {
+  /// 🏷️ BADGE
+  Widget _badge(
+      String text,
+      Color color,
+      ) {
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+
+      padding:
+      const EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: 5,
+      ),
+
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(20),
+
+        borderRadius:
+        BorderRadius.circular(20),
       ),
+
       child: Text(
         text,
-        style: const TextStyle(color: Colors.white),
+
+        style: const TextStyle(
+          color: Colors.white,
+        ),
       ),
     );
   }

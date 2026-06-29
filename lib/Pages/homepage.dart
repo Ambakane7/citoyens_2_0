@@ -121,9 +121,25 @@ class _LanguagePageState extends State<LanguagePage> {
                     /// BA
                     GestureDetector(
                       onTap: () {
-                        setState(() {
-                          selectedLang = "ba";
-                        });
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.orange,
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            content: const Text(
+                              "La langue Bambara est en cours de développement",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            duration: const Duration(seconds: 2),
+                          ),
+                        );
+
                       },
                       child: Container(
                         width: 60,
