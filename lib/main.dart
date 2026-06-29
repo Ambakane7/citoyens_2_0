@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ONBOARDING/onboradingscreen.dart';
@@ -30,9 +29,7 @@ class MyApp extends StatelessWidget {
       title: 'CITOYEN 2.0',
       debugShowCheckedModeBanner: false,
 
-      localizationsDelegates: const [
-        FlutterQuillLocalizations.delegate,
-      ],
+      localizationsDelegates: const [],
 
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
