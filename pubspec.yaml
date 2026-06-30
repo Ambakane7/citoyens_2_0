@@ -3,7 +3,7 @@ description: "Une application de signalisation des incidents au Mali développé
 
 publish_to: 'none'
 
-version: 1.0.0+9
+version: 1.0.0+10
 
 environment:
   sdk: ^3.9.2
