@@ -259,7 +259,7 @@ class Apropos extends StatelessWidget {
                 icon: Icons.handshake,
                 title: "Women Tech Mali & DANIDA/FAMOC",
                 content:
-                "Ce projet a été rendu possible grâce à l’engagement de WTM, association œuvrant pour la promotion des TIC auprès des jeunes filles et femmes, ainsi qu’au soutien financier de DANIA à travers le AMOC II.",
+                "Ce projet a été rendu possible grâce à l’engagement de WTM, association œuvrant pour la promotion des TIC auprès des jeunes filles et femmes, ainsi qu’au soutien financier de DANIDA à travers le FAMOC II.",
               ),
 
               const SizedBox(height: 20),
