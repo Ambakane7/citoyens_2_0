@@ -3,6 +3,10 @@
 <plist version="1.0">
 <dict>
 
+	<!-- Chiffrement -->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+
 	<!-- Configuration générale -->
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
@@ -28,19 +32,20 @@
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 
-	<key>CFBundleSignature</key>
-	<string>????</string>
-
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
-
+	<!-- 📱 iPhone uniquement -->
 	<key>UIDeviceFamily</key>
 	<array>
 		<integer>1</integer>
 	</array>
+
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+
+	<key>UIRequiresFullScreen</key>
+	<true/>
 
 	<!-- Storyboard -->
 	<key>UILaunchStoryboardName</key>
@@ -49,18 +54,10 @@
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 
-	<!-- Orientations -->
+	<!-- Orientations iPhone -->
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
@@ -71,10 +68,6 @@
 
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-
-	<!-- Chiffrement -->
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
 
 	<!-- ========================= -->
 	<!-- Permissions -->
@@ -88,7 +81,7 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Citoyens 2.0 accède à votre galerie afin de vous permettre de sélectionner des photos pour vos signalements.</string>
 
-	<!-- Sauvegarde des photos (optionnel mais recommandé) -->
+	<!-- Sauvegarde des photos -->
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Citoyens 2.0 peut enregistrer des images dans votre galerie lorsque cela est nécessaire.</string>
 
